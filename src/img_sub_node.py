@@ -9,6 +9,7 @@ from rospy_tutorials.msg import Floats
 from rospy.numpy_msg import numpy_msg
 from forCv.srv import *
 import numpy as np
+import time
 
 def getCropCoords(myimg):
     try:
@@ -23,6 +24,7 @@ def getCropCoords(myimg):
 def handle_img(data):
     #print(data.data.dtype)
     #print(data.data.reshape((480, 640, 3), order='C').astype(np.uint8)[:10, 0, 0])
+    t1 = time.time()
     myimg = data.data.reshape((480, 640, 3), order='C').astype(np.uint8)
     (x, y, w, h) = getCropCoords(myimg)
     print(x, y, w, h)
@@ -30,10 +32,11 @@ def handle_img(data):
         print('No face')
     else:
         cv2.rectangle(myimg, (x, y), (x+w, y+h), (255, 0, 0), 2)
-    cv2.imshow('full_image', myimg)
-    if cv2.waitKey(1) == 27:
-        rospy.signal_shutdown('Exited')
-
+        cv2.imshow('full_image', myimg)
+        if cv2.waitKey(1) == 27:
+            rospy.signal_shutdown('Exited')
+    t2 = time.time() - t1
+    print(t2)
 
 def main():
     rospy.init_node('img_sub_node', anonymous=True)
