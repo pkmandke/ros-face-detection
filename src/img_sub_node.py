@@ -7,25 +7,33 @@ import cv2
 import rospy
 from rospy_tutorials.msg import Floats
 from rospy.numpy_msg import numpy_msg
+from forCv.srv import *
 import numpy as np
-import pre_proc as pp
-import aligndlib as adl
 
-PRED_PATH = '/home/prathamesh/undergrad/btech_proj/misc/openface/testing/shape_predictor_68_face_landmarks.dat'
-al = adl.AlignDlib(PRED_PATH)
+def getCropCoords(myimg):
+    try:
+        rospy.wait_for_service('crop_service')
+        getCropFunc = rospy.ServiceProxy('crop_service', getCrop)
+        resp1 = getCropFunc(myimg.flatten(order='C').astype(np.float32))
+        return resp1.x, resp1.y, resp1.w, resp1.h
+    except rospy.ServiceException, e:
+        print("Service call failed")
 
 
 def handle_img(data):
     #print(data.data.dtype)
     #print(data.data.reshape((480, 640, 3), order='C').astype(np.uint8)[:10, 0, 0])
     myimg = data.data.reshape((480, 640, 3), order='C').astype(np.uint8)
-    _, fcrop = pp.face_crop(myimg, pred_path=al)
-    if _:
-        cv2.imshow('full_image', fcrop)
-        if cv2.waitKey(1) == 27:
-            rospy.signal_shutdown('Exited')
-    else:
+    (x, y, w, h) = getCropCoords(myimg)
+    print(x, y, w, h)
+    if x == -1 and y == -1 and w == -1 and h == -1:
         print('No face')
+    else:
+        cv2.rectangle(myimg, (x, y), (x+w, y+h), (255, 0, 0), 2)
+    cv2.imshow('full_image', myimg)
+    if cv2.waitKey(1) == 27:
+        rospy.signal_shutdown('Exited')
+
 
 def main():
     rospy.init_node('img_sub_node', anonymous=True)
