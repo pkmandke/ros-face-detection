@@ -1,13 +1,13 @@
 <?xml version="1.0"?>
 <package format="2">
   <name>forCv</name>
-  <version>0.0.0</version>
-  <description>The forCv package</description>
+  <version>1.0.0</version>
+  <description>The Face detection package</description>
 
   <!-- One maintainer tag required, multiple allowed, one person per tag -->
   <!-- Example:  -->
   <!-- <maintainer email="jane.doe@example.com">Jane Doe</maintainer> -->
-  <maintainer email="mandkepk97@gmail.com">Prathamesh</maintainer>
+  <maintainer email="mandkepk97@gmail.com">Prathamesh Mandke</maintainer>
 
 
   <!-- One license tag required, multiple allowed, one license per tag -->
@@ -53,8 +53,10 @@
   <build_depend>rospy</build_depend>
   <build_depend>rospy_tutorials</build_depend>
   <build_depend>python-numpy</build_depend>
+  <build_depend>actionlib_msgs</build_depend>
   <build_depend>message_generation</build_depend>
   <exec_depend>message_runtime</exec_depend>
+  <exec_depend>actionlib_msgs</exec_depend>
   <exec_depend>python-numpy</exec_depend>
   <build_export_depend>cv_bridge</build_export_depend>
   <build_export_depend>rospy</build_export_depend>

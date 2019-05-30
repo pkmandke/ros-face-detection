@@ -10,6 +10,7 @@ project(forCv)
 find_package(catkin REQUIRED COMPONENTS
   cv_bridge
   rospy
+  actionlib_msgs
   message_generation
 )
 
@@ -70,11 +71,15 @@ add_service_files(
 #   Action1.action
 #   Action2.action
 # )
-
+add_action_files(
+DIRECTORY action
+FILES face_detect_action.action
+)
 ## Generate added messages and services with any dependencies listed here
 generate_messages(
    DEPENDENCIES
    std_msgs  # Or other packages containing msgs
+   actionlib_msgs
  )
 
 ################################################
@@ -107,6 +112,7 @@ generate_messages(
 ## CATKIN_DEPENDS: catkin_packages dependent projects also need
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
+CATKIN_DEPENDS actionlib_msgs
 #  INCLUDE_DIRS include
 #  LIBRARIES forCv
 #  CATKIN_DEPENDS cv_bridge rospy
